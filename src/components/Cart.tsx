@@ -9,7 +9,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
 
 const Cart: React.FC = () => {
-  const { state, removeItem, updateQuantity, getTotalItems, getTotalPrice, closeCart } = useCart();
+  const { state, removeItem, updateQuantity, getTotalItems, getTotalPrice, openCart, closeCart } = useCart();
   const navigate = useNavigate();
 
   const handleCheckout = () => {
@@ -17,10 +17,14 @@ const Cart: React.FC = () => {
     navigate('/checkout');
   };
 
+  const handleCartClick = () => {
+    openCart();
+  };
+
   return (
-    <Sheet open={state.isOpen} onOpenChange={() => state.isOpen && closeCart()}>
+    <Sheet open={state.isOpen} onOpenChange={(open) => open ? openCart() : closeCart()}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className="relative">
+        <Button variant="outline" size="sm" className="relative" onClick={handleCartClick}>
           <ShoppingCart className="h-4 w-4" />
           {getTotalItems() > 0 && (
             <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
@@ -44,7 +48,7 @@ const Cart: React.FC = () => {
               <div className="flex flex-col items-center justify-center h-full text-center">
                 <ShoppingCart className="h-12 w-12 text-gray-400 mb-4" />
                 <p className="text-gray-500 text-lg">Your cart is empty</p>
-                <p className="text-gray-400 text-sm mt-1">Add some products to get started</p>
+                <p className="text-gray-400 text-sm mt-1">Add some delicious food to get started</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -109,7 +113,7 @@ const Cart: React.FC = () => {
                   <span>${getTotalPrice().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span>Shipping</span>
+                  <span>Delivery</span>
                   <span>Free</span>
                 </div>
                 <Separator />
